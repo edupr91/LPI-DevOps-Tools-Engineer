@@ -1,6 +1,6 @@
 # Setup your custom image
 Run the following to create your Dockerfile
-```console
+```shell
 cat <<EOF > Dockerfile
 # set base image
 FROM debian:latest
@@ -30,7 +30,7 @@ EOF
 ---
 
 Create index file, replace the text with whatever fits you best 
-```console
+```bash
 cat <<EOF > index.html
 Hello IT
 Have you tried turning it off and on again...?
@@ -39,28 +39,28 @@ EOF
 ---
 
 Create the image 
-```console
-~]# docker build --rm --no-cache --pull -t debian_apache2 .
+```shell
+~]$ docker build --rm --no-cache --pull -t debian_apache2 .
 ## <- there are some missing lines. This is just to make my point
 Successfully built 3f60df14d330
 Successfully tagged debian_apache2:latest
-~]# docker images
+~]$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 debian_apache2      latest              3f60df14d330        15 seconds ago      484MB
-~]# docker run -dtiP --name web debian_apache2 
+~]$ docker run -dtiP --name web debian_apache2 
 0c0b7ca3554069899f8b4f6bde751ca9b7f563e0ca4e76c89a7c555581e09721
 # lets find out which port has been exposed
-~]# docker ps -l
+~]$ docker ps -l
 CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                   NAMES
 0c0b7ca35540        debian_apache2      "/usr/sbin/apache2 -…"   About a minute ago   Up About a minute   0.0.0.0:32768->80/tcp   web
-~]# curl localhost:32768
+~]$ curl localhost:32768
 Hello IT
 Have you tried turning it off and on again...?
 ~]#
 ```
 
 Change the index and create new image version
-```console
+```shell
 cat <<EOF > index.html
 I like being weird. Weird's all i got
 EOF
