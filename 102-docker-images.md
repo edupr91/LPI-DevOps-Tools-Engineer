@@ -1,7 +1,7 @@
 # Setup your custom image
 Run the following to create your Dockerfile
 ```shell
-cat <<EOF > Dockerfile
+~]$ cat <<EOF > Dockerfile
 # set base image
 FROM debian:latest
 # Set main maintainer
@@ -31,7 +31,7 @@ EOF
 
 Create index file, replace the text with whatever fits you best
 ```bash
-cat <<EOF > index.html
+~]$ cat <<EOF > index.html
 Hello IT
 Have you tried turning it off and on again...?
 EOF
@@ -61,7 +61,7 @@ Have you tried turning it off and on again...?
 
 Change the index and create new image version
 ```shell
-cat <<EOF > index.html
+~]$ cat <<EOF > index.html
 I like being weird. Weird's all i got
 EOF
 ~]$ docker build --rm --no-cache --pull -t debian_apache2:1.2 .
