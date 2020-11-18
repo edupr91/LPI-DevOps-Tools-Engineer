@@ -1,6 +1,6 @@
 # Setup your custom image
 Run the following to create your Dockerfile
-```shell
+```bash
 ~]$ cat <<EOF > Dockerfile
 # set base image
 FROM debian:latest
@@ -39,7 +39,7 @@ EOF
 ---
 
 Create the image
-```shell
+```bash
 ~]$ docker build --rm --no-cache --pull -t debian_apache2 .
 ## <- there are some missing lines. This is just to make my point
 Successfully built 3f60df14d330
