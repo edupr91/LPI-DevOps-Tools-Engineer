@@ -10,7 +10,6 @@
         url: https://download.docker.com/linux/centos/docker-ce.repo
         dest: /etc/yum.repos.d/docker-ce.repo
       become: yes
-
     - name: Enable Docker Edge repo
       ini_file:
         dest: /etc/yum.repos.d/docker-ce.repo
@@ -22,6 +21,49 @@
       yum:
        name: epel-release
        state: present
+    - name: Install packages
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - bash-completion
+        - vim
+        - iptables-services
+
+
+    - name: Make sure firewalld is stoped and disabled
+      service:
+        name: firewalld
+        state: stopped
+        enabled: no
+    - name: Start and enable iptables
+      service:
+        name: iptables
+        state: started
+        enabled: yes
+    # Must remove the reject rule and add it last. We can't/dunno how to order rules
+    - name: remove - Reject input with icmp-host-prohibited
+      iptables:
+        state: absent
+        chain: INPUT
+        reject_with: icmp-host-prohibited
+    - name: Allow Docker Swarm
+      iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: 2377
+        jump: ACCEPT
+        comment: docker swarm
+    # Reject with icmp-host-prohibited
+    - name: Add - Reject input with icmp-host-prohibited
+      iptables:
+        state: present
+        chain: INPUT
+        reject_with: icmp-host-prohibited
+    - name: Reject forward with icmp-host-prohibited
+      iptables:
+        chain: FORWARD
+        reject_with: icmp-host-prohibited
 
 
     - name: Install Docker
@@ -34,14 +76,6 @@
         state: latest
 
 
-    - name: Install packages
-      yum:
-        name: "{{ packages }}"
-      vars:
-        packages:
-        - bash-completion
-        - vim
-
     - name: Start Docker service
       service:
         name: docker
@@ -53,6 +87,5 @@
         name: vagrant
         groups: docker
         append: yes
-
 
 
