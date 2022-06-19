@@ -1,8 +1,8 @@
 # Docker 101
 
 ## Some other usefull commands
-```bash 
-#Stop all containers 
+```bash
+#Stop all containers
 ~]$ docker stop $(docker ps -a -q)
 
 #Delete all containers
@@ -10,11 +10,11 @@
 ```
 
 ## Working with images
-```bash 
+```bash
 # List al images
 ~]$ docker images
 
-# Search image in a registry 
+# Search image in a registry
 ~]$ docker search nginx
 
 # Pull an specific image from a registry
@@ -29,14 +29,14 @@
 # Get low-leve info from image
 ~]$ docker inspect nginx
 
-# Delete image 
+# Delete image
 ~]$ docker rmi nginx
 ~]$ docker rmi -f nginx # force
 ~]$ docker rmi --help   # show extra info from the previous command
 ```
 
-## Run containers 
-```bash 
+## Run containers
+```bash
 # Run a container based on the nginx image, It wil assign a random name
 ~]$ docker run -dti nginx
 
@@ -48,6 +48,17 @@
 
 # Get low-lever info from a container
 ~]$ docker inspect web1
+```
+
+### Ports
+```bash
+# expose ports
+~]$ docker run -d -p 3306:3306 mysql # '-p <host_port>:<container_port>'
+~]$ docker run -d -p 8080:80 nginx   # expose nginx in local port 8080
+# List mapped ports
+[vagrant@centos9s ~]$ docker port <containter_instance>
+80/tcp -> 0.0.0.0:8080
+
 ```
 
 ## List running containers
@@ -84,7 +95,7 @@
 
 # Inspect docker element
 ~]$ docker inpect web1
-``` 
+```
 
 
 ## Show stats and hot change resources

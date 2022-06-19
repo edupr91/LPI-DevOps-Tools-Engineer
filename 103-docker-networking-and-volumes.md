@@ -10,6 +10,12 @@ NETWORK ID          NAME                DRIVER              SCOPE
 6c2ddf563aee        host                host                local
 0da7a5f9559b        none                null                local
 
+# Inspect network config
+~]$ docker network inspect <network_name|network_id>
+# Get specific value from the netowkr config
+~]$ docker network inspect <network_name|network_id> --format "{{json .IPAM.Config}}"
+[{"Subnet":"172.17.0.0/16","Gateway":"172.17.0.1"}]
+
 # Create network
 ~]$ docker network create --subnet 192.168.100.0/24 --ip-range  192.168.100.100/30 --gateway 192.168.100.100 prod
 dab18f6729282127c763413630728c55ed8caaf4476103c5f9068eedcdabe055
