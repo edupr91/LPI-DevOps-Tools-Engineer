@@ -16,7 +16,78 @@ NETWORK ID          NAME                DRIVER              SCOPE
 ~]$ docker network inspect <network_name|network_id> --format "{{json .IPAM.Config}}"
 [{"Subnet":"172.17.0.0/16","Gateway":"172.17.0.1"}]
 
-# Create network
+~]$ docker network create my_net
+4374e5c6b0feb02a712aec5478b5889aeba88d081cc7c71d93bfc77a75bde0e5
+~]$ docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+69d09c45517f   bridge    bridge    local
+a3d96d23ab05   host      host      local
+4374e5c6b0fe   my_net    bridge    local
+33ffa71f2df4   none      null      local
+# Connect container to a specific network on the fly
+~]$ docker network connect my_net <docker_instance>
+# Note that the container has two networks
+~]$ docker inspect  --format "{{json .NetworkSettings.Networks}}" <docker_instance> | jq
+{
+  "bridge": {
+    "IPAMConfig": null,
+    "Links": null,
+    "Aliases": null,
+    "NetworkID": "69d09c45517feb5dc51147540a99173210d5c512adc15a01e42774197a086d70",
+    "EndpointID": "d098f2826f0b126522cfd2261a1732feaa5cca5d6c7005fbf0378c788e9d333b",
+    "Gateway": "172.17.0.1",
+    "IPAddress": "172.17.0.2",
+    "IPPrefixLen": 16,
+    "IPv6Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "MacAddress": "02:42:ac:11:00:02",
+    "DriverOpts": null
+  },
+  "my_net": {
+    "IPAMConfig": {},
+    "Links": null,
+    "Aliases": [
+      "fa4dbe6d3111"
+    ],
+    "NetworkID": "4374e5c6b0feb02a712aec5478b5889aeba88d081cc7c71d93bfc77a75bde0e5",
+    "EndpointID": "436dd9475a8dbdeb54d420deb91f6d86cd878014d0944f8b435a831e77ca1e21",
+    "Gateway": "172.18.0.1",
+    "IPAddress": "172.18.0.2",
+    "IPPrefixLen": 16,
+    "IPv6Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "MacAddress": "02:42:ac:12:00:02",
+    "DriverOpts": {}
+  }
+}
+# now we can disconnect it from the original network
+~]$ docker network disconnect bridge <docker_instance>
+~]$ docker inspect  --format "{{json .NetworkSettings.Networks}}" <docker_instance> | jq
+{
+  "my_net": {
+    "IPAMConfig": {},
+    "Links": null,
+    "Aliases": [
+      "fa4dbe6d3111"
+    ],
+    "NetworkID": "4374e5c6b0feb02a712aec5478b5889aeba88d081cc7c71d93bfc77a75bde0e5",
+    "EndpointID": "436dd9475a8dbdeb54d420deb91f6d86cd878014d0944f8b435a831e77ca1e21",
+    "Gateway": "172.18.0.1",
+    "IPAddress": "172.18.0.2",
+    "IPPrefixLen": 16,
+    "IPv6Gateway": "",
+    "GlobalIPv6Address": "",
+    "GlobalIPv6PrefixLen": 0,
+    "MacAddress": "02:42:ac:12:00:02",
+    "DriverOpts": {}
+  }
+}
+
+
+
+# We can also go further and setup more networking parameter.
 ~]$ docker network create --subnet 192.168.100.0/24 --ip-range  192.168.100.100/30 --gateway 192.168.100.100 prod
 dab18f6729282127c763413630728c55ed8caaf4476103c5f9068eedcdabe055
 
