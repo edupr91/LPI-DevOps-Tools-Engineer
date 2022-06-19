@@ -59,11 +59,8 @@
 ~]$ docker ps -l
 ```
 
-## Interact with your contiainers
+## Interact with your containers
 ```bash
-# Open a bash terminal in a specific container
-~]$ docker exec -ti web1 /bin/bash
-
 # Start a container
 ~]$ docker start container-name
 
@@ -73,6 +70,13 @@
 # Remove a container
 ~]$ docker rm container-name
 ~]$ docker rm -f container-name # force
+
+# Open a bash terminal in a specific container that is already running
+~]$ docker exec -ti web1 /bin/bash
+
+# Check running processes in a container
+~]$ docker top <container_name>
+~]$ docker container top <container_name>
 
 # Puse/unpause container
 ~]$ docker pause container-name
